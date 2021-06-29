@@ -1,13 +1,17 @@
 from flask import Flask
-from config import GlobalConfig, FactoryConfig
+from settings import Settings, SettingsFactory
 
-cnf = FactoryConfig(GlobalConfig().ENV_STATE)()
-print(cnf.__repr__())
+# Settings
+settings = SettingsFactory(Settings().env_state)()
+print(settings.__repr__())
 
+# Flask App
 app = Flask(__name__)
-
 @app.route('/')
 def hello_world():
-    name = cnf.NAME
+    base_url = settings.base_url
+    name = settings.name
 
-    return f'Hello, {name} world!'
+    link = f'<a href="{base_url}" target="_blank">Link</a>'
+
+    return f'Hello, {name} world - visit this {link}!'
